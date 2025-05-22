@@ -109,3 +109,7 @@ def create_app():
     app.register_blueprint(bp)
 
     return app
+
+@bp.route('/')
+def index():
+    return render_template('index.html')
