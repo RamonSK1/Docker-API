@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, Blueprint
+from flask import Flask, jsonify, request, Blueprint, render_template
 from flask_migrate import Migrate
 from app.extensions import db
 from app.model import Ingrediente, Receita, IngredienteQuantidade
@@ -11,7 +11,11 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    bp = Blueprint('main', __name__)
+    bp = Blueprint('main', __name__, template_folder='templates')
+
+    @bp.route('/')
+    def index():
+        return render_template('index.html')
 
     @bp.route('/ingredientes', methods=['GET', 'POST'])
     def manage_ingredientes():
@@ -109,7 +113,3 @@ def create_app():
     app.register_blueprint(bp)
 
     return app
-
-@bp.route('/')
-def index():
-    return render_template('index.html')
