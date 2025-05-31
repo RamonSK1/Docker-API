@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Debug – List root folders
+      - name: Debug 
         run: ls -la
 
       - name: Cache Python packages
