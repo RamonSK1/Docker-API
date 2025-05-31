@@ -1,4 +1,5 @@
-name: Lint.yml
+name: Lint
+
 on: 
   pull_request:
     branches:
@@ -9,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        users: actions/checkout@v4
-        steps:
+        uses: actions/checkout@v4
 
       - name: Cache Python packages
         uses: actions/cache@v3
@@ -23,20 +23,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  
+          python-version: '3.8'
 
-      - name: Install Docker-API dependencies
+      - name: Create virtual environment
+        run: python3 -m venv venv
+
+      - name: Install dependencies
         run: |
-          venv/Scripts/activate
-          pip install -r requirements.txt  
-          pip install pylint
+          ./venv/bin/pip install -r requirements.txt
+          ./venv/bin/pip install pylint pytest
 
       - name: Run lint with pylint
-        run: |
-          venv/Scripts/activate
-          pylint . --fail-under=9
+        run: ./venv/bin/pylint . --fail-under=9
 
       - name: Run tests with pytest
-        run: |
-          venv/Scripts/activate
-          pytest tests/ --doctest-modules -q --disable-warnings
+        run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
