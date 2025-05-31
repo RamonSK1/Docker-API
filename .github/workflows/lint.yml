@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./API-Receitas/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('./Docker-API/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -27,24 +27,24 @@ jobs:
 
       - name: Create Virtual Environment
         run: python3 -m venv venv
-        working-directory: ./API-Receitas
+        working-directory: ./Docker-API
 
-      - name: Install API-Receitas dependencies
+      - name: Install Docker-API dependencies
         run: |
           source venv/bin/activate
           pip install -r requirements.txt  
           pip install pylint
-        working-directory: ./API-Receitas
+        working-directory: ./Docker-API
 
       - name: Run lint with pylint
         run: |
           source venv/bin/activate
           pylint . --fail-under=9
-        working-directory: ./API-Receitas
+        working-directory: ./Docker-API
 
       - name: Run tests with pytest
         run: |
           source venv/bin/activate
           pytest tests/ --doctest-modules -q --disable-warnings
-        working-directory: ./API-Receitas  
+        working-directory: ./Docker-API  
 
