@@ -43,13 +43,7 @@ jobs:
 
       - name: Run lint with pylint
         run: |
-          # Primeiro tente encontrar e analisar arquivos Python específicos
-          if [ -z "$(find . -name '*.py' | grep -v venv)" ]; then
-            echo "No Python files found to lint!"
-            exit 1
-          else
-            ./venv/bin/pylint $(find . -name '*.py' | grep -v venv) --fail-under=9
-          fi
+          ./venv/bin/pylint app/ ./ --fail-under=9
 
       - name: Run tests with pytest
         run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
