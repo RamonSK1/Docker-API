@@ -25,10 +25,6 @@ jobs:
         with:
           python-version: '3.8'  
 
-      - name: Create Virtual Environment
-        run: python3 -m venv venv
-        working-directory: ./Docker-API
-
       - name: Install Docker-API dependencies
         run: |
           source venv/bin/activate
