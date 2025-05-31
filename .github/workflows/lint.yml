@@ -1,17 +1,17 @@
-name: Lint
-
+name: Lint.yml
 on: 
   pull_request:
     branches:
       - main
 
 jobs:
-  lint:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        
+        users: actions/checkout@v4
+        steps:
+
       - name: Cache Python packages
         uses: actions/cache@v3
         with:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.8'  
 
       - name: Create Virtual Environment
         run: python3 -m venv venv
@@ -46,4 +46,5 @@ jobs:
         run: |
           source venv/bin/activate
           pytest tests/ --doctest-modules -q --disable-warnings
-        working-directory: ./Docker-API
+        working-directory: ./Docker-API  
+
