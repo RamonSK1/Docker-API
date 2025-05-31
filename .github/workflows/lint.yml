@@ -8,6 +8,9 @@ on:
 jobs:
   Lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash  # Garante compatibilidade com os comandos que você está usando
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,11 +33,15 @@ jobs:
 
       - name: Install dependencies
         run: |
+          ./venv/bin/pip install --upgrade pip
           ./venv/bin/pip install -r requirements.txt
           ./venv/bin/pip install pylint pytest
 
+      - name: Debug files (opcional)
+        run: ls -la
+
       - name: Run lint with pylint
-        run: ./venv/bin/pylint  --ignore=venv .  --fail-under=9
+        run: ./venv/bin/pylint . --ignore=venv --fail-under=9
 
       - name: Run tests with pytest
         run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
