@@ -1,4 +1,5 @@
-name: Lint.yml
+name: Lint
+
 on: 
   pull_request:
     branches:
@@ -7,6 +8,10 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -15,35 +20,30 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./API-Receitas/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  
+          python-version: '3.9'
 
-      - name: Create Virtual Environment
+      - name: Create virtual environment
         run: python3 -m venv venv
-        working-directory: ./API-Receitas
 
-      - name: Install API-Receitas dependencies
+      - name: Install dependencies
         run: |
-          source venv/bin/activate
-          pip install -r requirements.txt  
-          pip install pylint
-        working-directory: ./API-Receitas
+          ./venv/bin/pip install --upgrade pip
+          ./venv/bin/pip install -r requirements.txt
+          ./venv/bin/pip install pylint pytest
+
+      - name: Debug - List Python files
+        run: find . -name "*.py" | grep -v venv
 
       - name: Run lint with pylint
         run: |
-          source venv/bin/activate
-          pylint . --fail-under=9
-        working-directory: ./API-Receitas
+          ./venv/bin/pylint app/ ./ --fail-under=9
 
       - name: Run tests with pytest
-        run: |
-          source venv/bin/activate
-          pytest tests/ --doctest-modules -q --disable-warnings
-        working-directory: ./API-Receitas  
-
+        run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
