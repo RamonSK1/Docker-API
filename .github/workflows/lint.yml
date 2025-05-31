@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash  # Garante compatibilidade com os comandos que você está usando
+        shell: bash
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,11 +38,18 @@ jobs:
           ./venv/bin/pip install -r requirements.txt
           ./venv/bin/pip install pylint pytest
 
-      - name: Debug files (opcional)
-        run: ls -la
+      - name: Debug - List Python files
+        run: find . -name "*.py" | grep -v venv
 
       - name: Run lint with pylint
-        run: ./venv/bin/pylint . --ignore=venv --fail-under=9
+        run: |
+          # Primeiro tente encontrar e analisar arquivos Python específicos
+          if [ -z "$(find . -name '*.py' | grep -v venv)" ]; then
+            echo "No Python files found to lint!"
+            exit 1
+          else
+            ./venv/bin/pylint $(find . -name '*.py' | grep -v venv) --fail-under=9
+          fi
 
       - name: Run tests with pytest
         run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
