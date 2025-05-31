@@ -34,7 +34,7 @@ jobs:
           ./venv/bin/pip install pylint pytest
 
       - name: Run lint with pylint
-        run: ./venv/bin/pylint  .--ignore=venv --fail-under=9
+        run: ./venv/bin/pylint  . --ignore=venv --fail-under=9
 
       - name: Run tests with pytest
         run: ./venv/bin/python -m pytest tests/ --doctest-modules -q --disable-warnings
