@@ -27,13 +27,13 @@ jobs:
 
       - name: Install Docker-API dependencies
         run: |
-          source venv/bin/activate
+          ./venv/Scripts/activate
           pip install -r requirements.txt  
           pip install pylint
 
       - name: Run lint with pylint
         run: |
-          source venv/bin/activate
+          ./venv/Scripts/activate
           pylint . --fail-under=9
 
       - name: Run tests with pytest
